@@ -8,7 +8,7 @@ Work-in-progress. Data and R scripts for our article.
   - [x] write README (codebook) for data folder 
 - [ ] `R` folder with `lme4` scripts for models.
 - [ ] `reports` folder for generating figures, tables and number-heavy paragraphs from paper.
-- [ ] `reports/assets/refs.bib`file with BibTeX info for cited articles.
+- [x] `reports/assets/refs.bib`file with BibTeX info for cited articles.
  
 ## Reproducibility Maybe-dos
 - [x] Use `packrat` to lock down R package versions for this repository?
