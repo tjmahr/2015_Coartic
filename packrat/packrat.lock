@@ -14,6 +14,15 @@ Source: CRAN
 Version: 0.3.1
 Hash: 3a9e85b26ec3ab570266bccb3f9de055
 
+Package: MASS
+Source: CRAN
+Version: 7.3-39
+
+Package: Matrix
+Source: CRAN
+Version: 1.1-5
+Requires: lattice
+
 Package: R6
 Source: CRAN
 Version: 2.0.1
@@ -26,14 +35,14 @@ Hash: 5203278413b09be06483c5ac1920bb05
 
 Package: Rcpp
 Source: CRAN
-Version: 0.11.4
-Hash: 1f684f6afd28079e4e609b49f353e49f
+Version: 0.11.5
+Hash: 3e452cb48f3ec8a7cf27fb9ab8624639
 
 Package: RcppEigen
 Source: CRAN
 Version: 0.3.2.4.0
-Hash: 6f293b3d9cc3371d986ed3b86998b686
-Requires: Rcpp
+Hash: 7ee542f16cd2d1fe82b410000795476b
+Requires: Matrix, Rcpp
 
 Package: assertthat
 Source: CRAN
@@ -75,7 +84,7 @@ Hash: 89dc4c8734dad5322bb3c5c2af09056f
 Package: dplyr
 Source: CRAN
 Version: 0.4.1
-Hash: 4ce03ad26fb9592dda1274f72c5d3257
+Hash: 3bcfd4ae622d206d1f0cd9f1c759846d
 Requires: BH, DBI, R6, Rcpp, assertthat, lazyeval, magrittr
 
 Package: evaluate
@@ -93,7 +102,7 @@ Package: ggplot2
 Source: CRAN
 Version: 1.0.0
 Hash: c8bff66238347472f08b6a35608539ff
-Requires: digest, gtable, plyr, proto, reshape2, scales
+Requires: MASS, digest, gtable, plyr, proto, reshape2, scales
 
 Package: gtable
 Source: CRAN
@@ -122,6 +131,10 @@ Source: CRAN
 Version: 0.3
 Hash: 568a992912caf7eeddfb121924154047
 
+Package: lattice
+Source: CRAN
+Version: 0.20-30
+
 Package: lazyeval
 Source: CRAN
 Version: 0.1.10
@@ -130,8 +143,8 @@ Hash: 7f88a453d0b52e36ea46d9d33c6dcf90
 Package: lme4
 Source: CRAN
 Version: 1.1-7
-Hash: c180abce1c10306f0db266cf627af314
-Requires: Rcpp, RcppEigen, minqa, nloptr
+Hash: 9d18cc3c929838ccdef3bdab917caa9a
+Requires: MASS, Matrix, Rcpp, RcppEigen, lattice, minqa, nlme, nloptr
 
 Package: magrittr
 Source: CRAN
@@ -152,7 +165,7 @@ Hash: 9179db921fcb2e5be44e217042ed06bc
 Package: minqa
 Source: CRAN
 Version: 1.2.4
-Hash: bf5030834197a011dc7bc9e117ab8ce3
+Hash: 458796870f58fde96e824382cc0e8d82
 Requires: Rcpp
 
 Package: mnormt
@@ -165,6 +178,11 @@ Source: CRAN
 Version: 0.4.2
 Hash: fa8af6d040041439b249351e9d16ae9a
 Requires: colorspace
+
+Package: nlme
+Source: CRAN
+Version: 3.1-120
+Requires: lattice
 
 Package: nloptr
 Source: CRAN
@@ -179,7 +197,7 @@ Hash: 16c72d5c802629fae5a4abca901e0199
 Package: plyr
 Source: CRAN
 Version: 1.8.1
-Hash: 7dd935ee4050eaf2973108be2faf245e
+Hash: 6a4457c04af4cf5e4a8166ff59bcfd96
 Requires: Rcpp
 
 Package: proto
@@ -196,7 +214,7 @@ Requires: mnormt
 Package: reshape2
 Source: CRAN
 Version: 1.4.1
-Hash: c401ef665db07687e1e54fbc60c683bb
+Hash: d3d77b083fd5485f674487aa23011ea7
 Requires: Rcpp, plyr, stringr
 
 Package: rmarkdown
