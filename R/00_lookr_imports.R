@@ -1,5 +1,8 @@
-# Functions that normally are packaged in lookr (github.com/tjmahr/lookr), but
-# are included here for reproducibility.
+# Functions here are normally packaged in lookr (github.com/tjmahr/lookr), but
+# they are included here for reproducibility.
+
+
+
 
 #' Aggregate looks to target image
 #'
@@ -17,6 +20,7 @@
 #' @importFrom reshape2 dcast
 #' @export
 aggregate_looks <- function(frame, formula = Subj + Condition + Time ~ GazeByImageAOI) {
+  require("reshape2")
   looks <- dcast(frame, formula = formula, fun.aggregate = length,
                  value.var = "GazeByImageAOI")
   other_AOIs <- setdiff(frame$GazeByImageAOI, c("Target", "tracked", NA))
@@ -25,6 +29,7 @@ aggregate_looks <- function(frame, formula = Subj + Condition + Time ~ GazeByIma
   names(looks)[which(names(looks) == "tracked")] <- "Elsewhere"
   transform(looks, Proportion = Target / (Others + Target))
 }
+
 
 #' Assign bin numbers to a vector
 #'
@@ -90,9 +95,6 @@ assign_bins <- function(xs, bin_width = 3, na_location = "tail", partial = FALSE
 }
 
 
-
-
-
 #' Compute empirical logit
 #'
 #' @param x vector containing number of looks to target
@@ -129,12 +131,4 @@ orthogonal_time <- function(times, degree) {
   time_df$Time <- clean_times
   time_df
 }
-
-
-
-
-
-
-
-
 

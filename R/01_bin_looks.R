@@ -1,10 +1,9 @@
 library("magrittr")
 library("dplyr", warn.conflicts = FALSE)
-library("reshape2")
-source("R/lookr_exports.R")
+source("R/00_lookr_imports.R")
 options(stringsAsFactors = FALSE)
 
-# Get the labeled gaze locations for looks during the analysis window
+# Get gaze locations (mapped to target/distractor AOIs)
 gaze <- read.csv("data/gazes.csv") %>%
   as_data_frame %>%
   select(-XMean, -YMean, -GazeByAOI)
@@ -15,8 +14,7 @@ stim <- read.csv("data/trials.csv") %>%
   select(Subj:TrialNo, Condition = StimType)
 
 # Count the looks to each area of interest
-looks <- left_join(gaze, stim)
-look_counts <- looks %>%
+look_counts <- left_join(gaze, stim) %>%
   aggregate_looks(Subj + Condition + Time ~ GazeByImageAOI) %>%
   as_data_frame %>%
   select(-Elsewhere, -NAs, -Others, -Proportion)
@@ -44,8 +42,8 @@ binned %<>%
 
 # Subset down to analysis window and experimental conditions
 model_ready <- binned %>%
-  filter(between(Time, 175, 1025), Condition != "filler") %>%
-  # Renumber bins in this subset
+  filter(between(Time, 200, 1000), Condition != "filler") %>%
+  # Renumber bins during this slice of time
   mutate(Bin = seq_along(Bin))
 
 # Create orthogonal polynomials for time
@@ -56,3 +54,4 @@ orth_times <- model_ready$Bin %>%
 # Include orthogonal times
 model_ready <- left_join(model_ready, orth_times) %T>%
   write.csv("data/model_data.csv", row.names = FALSE)
+
