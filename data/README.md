@@ -4,7 +4,7 @@ These data were collected as part of the Little Listeners project.
 
 ## subj.csv
 
-Child-level scores. One row per participant.
+Child-level scores that relevant for analyses. One row per participant.
 
 - `Subj`: Participant ID number.
 - `Age`: Age in months. Rounded to one decimal place, so that 1.1 months 
@@ -24,6 +24,18 @@ Child-level scores. One row per participant.
       child could not be tested. 
     + `excessive-missing-data`: Child has enough trials, but they have more than 
       50% missing data during the analysis window.
+
+### genders.csv
+
+Numbers of included children in each gender. One row per gender.
+
+- `Excluded`: Reason for excluding the child's looking data.
+- `Gender`: M: male, F: female.
+- `n`: Number of children.
+
+We don't include individual children's genders in the `subj.csv` file because 
+that variable was not relevant for our analyses. But we do report general 
+demographics in the text, so we include a breakdown in `genders.csv`
 
 ## trials.csv
 
@@ -66,7 +78,7 @@ circa [commit 100ca12e21][100ca12e21].
     + `ImageL`, `ImageR`: Gaze located within the left/right image.
     + `tracked`: Gaze located onscreen but not within the left/right image.
     + `NA`: Gaze not tracked.
-- `GazeByImageAOI`: Location of the gaze onscreen, expressed as an 
+- `GazeByImageAOI`: Location of the gaze onscreen, expressed as 
   target/distractor/other.
     + `Target`, `Distractor`: Gaze located within the Target/Distractor image.
     + `tracked`: Gaze located onscreen but not within the Target/Distractor 
