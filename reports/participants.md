@@ -1,4 +1,6 @@
 
+_This script fills in variables used in paragraphs in the article._
+
 
 
 
@@ -15,3 +17,13 @@ additional 11 children were excluded from the analyses due to
 inattentiveness (10) or having more than 50% missing data during 
 non-filler trials (1).  
 
+
+
+### Software sentence
+
+
+
+Analyses were performed in `R` (vers. 3.1.1) with the `lme4` package 
+[vers. 1.1.7; @lme4]. 
+
+***

@@ -3,7 +3,11 @@ output:
   html_document:
     fig_caption: yes
     keep_md: yes
+csl: assets/apa.csl
+bibliography: assets/refs.bib
 ---
+
+_This script fills in variables used in paragraphs in the article._
 
 ```{r Preamble, echo = FALSE, warning = FALSE, message = FALSE}
 library("knitr")
@@ -63,3 +67,15 @@ additional `r n_dropped` children were excluded from the analyses due to
 inattentiveness (`r n_inattentive`) or having more than 50% missing data during 
 non-filler trials (`r n_mistracking`).  
 
+
+
+### Software sentence
+
+```{r}
+r_vers <- sprintf("%s.%s", R.version$major, R.version$minor)
+```
+
+Analyses were performed in `R` (vers. `r r_vers`) with the `lme4` package 
+[vers. `r packageVersion("lme4")`; @lme4]. 
+
+***
