@@ -20,7 +20,7 @@ This repository works best with a current version of RStudio. Current (2015) ver
 of RStudio include pandoc, and it is possible to render RMarkdown files or run the 
 `build.sh` script with a single click. Use `New Project > Version Control > Git > ...` 
 to clone this repository as an RStudio project. Once it's cloned, the `packrat` 
-bootstrapper will downloaded the packages and recreate the package library used for this 
+bootstrapper will download the packages and recreate the package library used for this 
 repository.
 
 ## Reproducibility Maybe-dos
