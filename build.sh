@@ -7,6 +7,7 @@ Rscript --no-environ R/02_models.R
 echo "Generating report output"
 Rscript -e '
   options(warn = -1)
+  rmarkdown::render("reports/citations.Rmd")
   rmarkdown::render("reports/participants.Rmd")
   rmarkdown::render("reports/model_summary.Rmd")
 '
