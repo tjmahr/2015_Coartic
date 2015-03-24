@@ -14,7 +14,7 @@ stim <- read.csv("data/trials.csv") %>%
   select(Subj:TrialNo, Condition = StimType)
 
 # Count the looks to each area of interest
-look_counts <- left_join(gaze, stim) %>%
+look_counts <- left_join(gaze, stim, c("Subj", "Block", "TrialNo")) %>%
   aggregate_looks(Subj + Condition + Time ~ GazeByImageAOI) %>%
   as_data_frame %>%
   select(-Elsewhere, -NAs, -Others, -Proportion)
@@ -52,6 +52,6 @@ orth_times <- model_ready$Bin %>%
   rename(Bin = Time)
 
 # Include orthogonal times
-model_ready <- left_join(model_ready, orth_times) %T>%
+model_ready <- left_join(model_ready, orth_times, by = "Bin") %T>%
   write.csv("data/model_data.csv", row.names = FALSE)
 
