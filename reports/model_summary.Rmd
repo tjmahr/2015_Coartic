@@ -1,0 +1,260 @@
+---
+title: "Models"
+output:
+  html_document:
+    fig_caption: yes
+    keep_md: yes
+    css: assets/custom.css
+  word_document: default
+---
+
+_This script generates the summary tables and reports statistics for the 
+models in the article._
+
+```{r Knitr Preamble, echo = FALSE, warning = FALSE, message = FALSE}
+library("knitr")
+
+options(stringsAsFactors = FALSE)
+opts_knit$set(root.dir = "../")
+opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 6.5,
+  fig.height = 4.5)
+```
+
+
+```{r Preamble}
+library("magrittr")
+library("dplyr")
+library("broom")
+library("lme4")
+library("ggplot2")
+
+load("data/models.Rdata")
+
+# Nearly all of the custom functions are in the 00_utils_formatting.R script
+source("R/00_utils_formatting.R")
+source("R/00_lookr_imports.R")
+
+# Table to help convert orthogonal time values back to milliseconds
+times <- read.csv("data/model_data.csv") %>% 
+  select(Time, ot1) %>% 
+  unique
+
+# Extract values from an lme4 model
+tidy_model <- . %>% 
+  augment %>% 
+  tbl_df %>% 
+  rename(Fitted = .fitted) %>%
+  # Include millisecond time values from above
+  left_join(times, by = "ot1")
+
+# Plot an lme4 model
+plot_model <- function(model) {
+  m <- tidy_model(model)
+
+  # Format title
+  l1 <- "Observed fixation probabilities and standard errors (symbols)"
+  l2 <- "and growth curve model estimates (lines)"
+  title_lines <- sprintf("%s\n%s", l1, l2)
+  
+  ggplot(m, aes(x = Time, y = elogit, color = Condition)) +
+    # Observed values
+    stat_summary(fun.data = mean_se, geom = "pointrange") +
+    # Model fits
+    stat_summary(aes(y = Fitted), fun.y = mean, geom = "line") +
+      labs(x = "Time since target word onset (ms)",
+           y = "Emp. log-odds of looking to target",
+           title = title_lines)
+}
+```
+
+
+## Model Output
+
+`lme4::summary` of the final model:
+
+```{r}
+# Called baseline now bc it's the baseline for the model comparisons later
+baseline <- models$main$m_cond_ranef
+
+summary(baseline)
+```
+
+```{r}
+plot_model(baseline)
+```
+
+
+
+## Write up
+
+```{r}
+# Prepare table to support easy in-line printing of equations
+params <- baseline %>% tidy_lme4 %>% rename(B = Estimate)
+params$subscript <- c(paste0(0:3, 0), paste0(0:3, 1))
+params$Parameter %<>% 
+  str_replace(".Intercept.", "Intercept") %>%
+  str_replace("Conditionfacilitating", "faci") %>%
+  str_replace(":", "_")
+row.names(params) <- params$Parameter
+
+# Shortcut for inline reporting from the above table
+report_row <- function(row_name) report_fixef_row(params, row_name)
+
+# Pre-calculate intercept as proportion
+b0 <- params["Intercept", "B"]
+b0_prop <- b0 %>% inv_logit %>% round(2) %>% remove_leading_zero
+
+# Pre-calculate effect of condition as proportion
+b0_faci <- params["faci", "B"]
+b0_increase <- inv_logit(b0 + b0_faci) - inv_logit(b0)
+b0_increase %<>% round(2) %>% remove_leading_zero()
+```
+
+The log-odds of looking to target in the neutral condition over the entire 
+analysis window were estimated by the intercept term, 
+_&gamma;_<sub>00</sub>&nbsp;=&nbsp;`r fixed_digits(b0, 2)` 
+(proportion:&nbsp;`r b0_prop`). The linear, quadratic, and cubic orthogonal 
+time terms were all significant, confirming a curvilinear, sigmoid-shape change 
+in looks to target over time.
+
+There was a significant increase in accuracy in the facilitating condition 
+[`r report_row("faci")`] such that the overall proportion of looking to target 
+increased by `r b0_increase`. There was a significant effect of condition on 
+the quadratic term [`r report_row("ot2_faci")`]. These effects can be 
+interpreted geometrically: The larger intercept increases the overall area 
+under the curve, and the reduced quadratic effect decreases the bowing on the 
+center of the curve, allowing the facilitating curve to obtain its positive 
+slope earlier than the neutral curve. There was not a significant effect of 
+condition on the linear term [`r report_row("ot1_faci")`], indicating that the 
+overall slopes of the growth curves did not differ significantly. These 
+condition effects result in the two curves being roughly parallel at the 
+center of the analysis window but with points phase-shifted by 100 ms. 
+
+
+
+## Tables
+
+### Fixed effects
+
+```{r, results = "asis"}
+pretty_fixed_effects <- baseline %>% 
+  tidy_lme4 %>% 
+  mutate(p = format_pval(p), Parameter = fix_param_names(Parameter)) %>% 
+  mutate_each(funs(format_fixef_num), Estimate:t) %>% 
+  rename(`_t_` = t, `_p_` = p)
+
+# Include gammas (Gij) after each parameter name
+subs <- c(paste0(0:3, 0), paste0(0:3, 1))
+var_labels <- parenthesize(paste0(emphasize("&gamma;"), subscript(subs)))
+pretty_fixed_effects$Parameter %<>% paste(., var_labels)
+
+pretty_fixed_effects %>% 
+  kable(format = "pandoc", caption = "Model fixed effects", 
+        align = str_tokenize("lrrrr"))
+```
+
+### Random effects
+
+```{r, results = "asis"}
+ranef_table <- baseline %>% 
+  tidy_ranef_summary %>% 
+  # Format the numbers
+  mutate_each(funs(format_fixef_num), vcov, sdcor) %>%
+  mutate_each(funs(format_cor), -var1, -grp, -vcov, -sdcor) %>%
+  sort_ranef_grps %>%
+  # Format variable names and group names
+  mutate(var1 = fix_param_names(var1) %>% blank_nas,
+         grp =  blank_same_as_last(grp) %>% fix_param_names) %>% 
+  rename(Group = grp, Parameter = var1, Variance = vcov, SD = sdcor)
+
+# Correlation columns need names with characters so that pandoc can align them
+names(ranef_table)[5:8] <- c("Correlations", "&nbsp;", " &nbsp;", "  &nbsp;")
+
+# Include Uij, Wijk, Rtjk coefficients in Estimates column. 
+# Procedure: Make subscripts, prefix with grouping letter, wrap in parens,
+# prefix with space for non-residual terms
+child_j <- paste0(0:3, emphasize("j")) %>% 
+  subscript %>% 
+  paste_onto(emphasize("U")) %>% 
+  parenthesize %>% 
+  paste_onto(" ")
+
+child_group_jk <- paste0(0:3, emphasize("jk")) %>% 
+  subscript %>% 
+  paste_onto(emphasize("W")) %>% 
+  parenthesize %>% 
+  paste_onto(" ")
+
+residual_tjk <- paste0(emphasize("R"), subscript(emphasize("tjk")))
+
+# Attach onto Estimates column
+ranef_table$Parameter %<>% paste0(., c(child_j, child_group_jk, residual_tjk))
+
+ranef_table %>% 
+  kable(caption = "Model random effects", format = "pandoc", 
+        align = str_tokenize("llrrrrrr"))
+```
+
+
+
+## Model Comparisons
+
+The effects are age and vocabulary are tested by using nested model comparisons 
+via the `anova` function. 
+
+
+### Age Models
+
+```{r Age models, results='asis', warning=FALSE}
+# Table-printing shortcut for these anova pipelines
+anova_kable <- function(model, caption) {
+  kable(model, caption = caption, format = "pandoc", digits = 2) %T>% print
+}
+
+# Include model without age as baseline for comparisons
+age_models <- c(baseline, models$age$age_time)
+age_cond_models <- c(baseline, models$age$age_time_cond)
+
+# Using do.call because models are stored in a list
+age_anova1 <- age_models %>% 
+  do.call(anova, .) %T>% 
+  anova_kable(caption = "Age models")
+
+age_anova2 <- age_cond_models %>% 
+  do.call(anova, .) %T>% 
+  anova_kable(caption = "Age x Condition models")
+```
+
+
+### Vocabulary models
+
+```{r, results = "asis"}
+# Include model without vocab as baseline for comparisons
+cdi_models <- c(baseline, models$cdi$cdi_time)
+cdi_cond_models <- c(baseline, models$cdi$cdi_time_cond)
+
+cdi_anova1 <- cdi_models %>% 
+  do.call(anova, .) %T>% 
+  anova_kable(caption = "Vocabulary models")
+
+cdi_anova2 <- cdi_cond_models %>% 
+  do.call(anova, .) %T>% 
+  anova_kable(caption = "Vocabulary x Condition models")
+```
+
+
+### Write up for article
+
+Participant-level variables were tested by comparing nested models. There was
+no effect of vocabulary size on the intercept 
+(`r pretty_chi_result(cdi_anova1, "MODEL2")`), 
+nor did vocabulary size interact with the condition effect 
+(`r pretty_chi_result(cdi_anova2, "MODEL2")`). There was also no effect of age 
+on the intercept term (`r pretty_chi_result(age_anova1, "MODEL2")`) or on the 
+condition term (`r pretty_chi_result(age_anova2, "MODEL2")`). Model fit did not 
+significantly improve when vocabulary size or age were allowed to interact with 
+Time or Time-by-Condition parameters.
