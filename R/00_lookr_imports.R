@@ -132,3 +132,10 @@ orthogonal_time <- function(times, degree) {
   time_df
 }
 
+
+# logits to proportions
+inv_logit <- gtools::inv.logit
+
+# normal approximation of p-values
+normal_approx <- function(ts) 2 * (1 - pnorm(abs(ts)))
+
