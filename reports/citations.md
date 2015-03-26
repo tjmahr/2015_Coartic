@@ -30,7 +30,7 @@ parentheses and in the bibliography for the article.
 
 [@Edwards2004; @Metsala1999; @PRIMIR; @Werker2002]
 
-[@Dollaghan1994]
+[@Dollaghan1994; @Magnuson2003]
 
 [e.g., @Swingley2000; @Swingley2002; @WhiteMorgan2008; see also review in 
 @TRACE_Mispro]
