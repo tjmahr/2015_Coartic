@@ -1,11 +1,15 @@
 ---
 title: "Models"
 output:
+  word_document:
+  - default
   html_document:
-    fig_caption: yes
-    keep_md: yes
-    css: assets/custom.css
-  word_document: default
+    css:
+    - assets/custom.css
+    fig_caption:
+    - yes
+    keep_md:
+    - yes
 ---
 
 _This script generates the summary tables and reports statistics for the 
@@ -251,10 +255,10 @@ cdi_anova2 <- cdi_cond_models %>%
 
 Participant-level variables were tested by comparing nested models. There was
 no effect of vocabulary size on the intercept 
-(`r pretty_chi_result(cdi_anova1, "MODEL2")`), 
-nor did vocabulary size interact with the condition effect 
-(`r pretty_chi_result(cdi_anova2, "MODEL2")`). There was also no effect of age 
-on the intercept term (`r pretty_chi_result(age_anova1, "MODEL2")`) or on the 
-condition term (`r pretty_chi_result(age_anova2, "MODEL2")`). Model fit did not 
+(`r pretty_chi_result(cdi_anova1, "MODEL2")`), nor did vocabulary size interact 
+with the condition effect (`r pretty_chi_result(cdi_anova2, "MODEL2")`). 
+There was also no effect of age on the intercept term 
+(`r pretty_chi_result(age_anova1, "MODEL2")`), nor did age interact with 
+condition (`r pretty_chi_result(age_anova2, "MODEL2")`). Model fit did not 
 significantly improve when vocabulary size or age were allowed to interact with 
 Time or Time-by-Condition parameters.
