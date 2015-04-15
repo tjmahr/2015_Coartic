@@ -1,4 +1,5 @@
 ---
+title: "Plots"
 output:
   html_document:
     fig_caption: yes
@@ -25,8 +26,11 @@ opts_chunk$set(
 
 
 ```{r libraries}
-library("magrittr")
+library("magrittr", warn.conflicts = FALSE)
+library("tidyr", warn.conflicts = FALSE)
 library("dplyr", warn.conflicts = FALSE)
+library("stringr")
+library("readr")
 library("broom")
 library("grid")
 library("ggplot2")
@@ -36,6 +40,63 @@ inv_logit <- gtools::inv.logit
 set_condition <- . %>% 
   factor(., levels = c("facilitating", "neutral"))
 ```
+
+## Figure 1
+
+```{r, fig.align="center"}
+prep_formant_csv <- function(path) {
+  df <- read_csv(path, na = "--undefined--")
+
+  # Clean up column names
+  names(df) %<>% str_replace(".Hz.", "") %>%
+    str_replace(".s.", "") %>%
+    str_replace("time", "Time")
+
+  # Extract sound from filename
+  sound <- path %>% 
+    str_extract(perl("(?<=the_).(?=\\.csv)")) %>% 
+    tolower
+
+  # Drop unnecessary columns (like bandwidth)
+  df %<>% select(Time, F1, F2) %>%
+    na.omit %>%
+    mutate(Sound = sound)
+
+  df
+}
+
+# Load and reduce the formant files
+formants <- list.files("data/formants/", full.names = TRUE) %>% 
+  lapply(prep_formant_csv) %>% 
+  bind_rows  %>% 
+  # Convert to long format (so there's a Formant-Name column)
+  gather(Formant, Hz, -Time, -Sound) %>%
+  mutate(ms = Time * 1000) %>%
+  filter(150 <= ms, ms <= 405)
+
+# Convert sound name into "Token"
+formants$Token <- formants$Sound %>%
+  str_replace("^v$", "neut.") %>%
+  str_replace("^(d|b)$", "/\\1/ faci.") %>%
+  factor(levels = c("neut.", "/d/ faci.", "/b/ faci."))
+
+inset_legend <- theme(
+  legend.position = c(.5, 0),
+  legend.justification = c(.5, 0),
+  legend.background = element_rect(fill = "white", color = "black"),
+  legend.direction = "horizontal")
+
+
+p <- ggplot(data = formants) +
+  aes(x = ms, y = Hz, color = Token, shape = Token) +
+  geom_point() +
+  labs(x = "Time (ms)", y = "F1 and F2 Frequency (Hz)") +
+  ylim(0, NA) +
+  theme_bw(base_size = 12) +
+  scale_color_brewer(palette = "Dark2") + inset_legend
+p
+```
+
 
 
 ```{r ggplot2 shortcuts}

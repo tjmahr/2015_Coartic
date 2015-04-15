@@ -1,3 +1,4 @@
+# Plots
 
 _This script generates the plots used in the article._
 
@@ -6,8 +7,11 @@ _This script generates the plots used in the article._
 
 
 ```r
-library("magrittr")
+library("magrittr", warn.conflicts = FALSE)
+library("tidyr", warn.conflicts = FALSE)
 library("dplyr", warn.conflicts = FALSE)
+library("stringr")
+library("readr")
 library("broom")
 library("grid")
 library("ggplot2")
@@ -17,6 +21,66 @@ inv_logit <- gtools::inv.logit
 set_condition <- . %>% 
   factor(., levels = c("facilitating", "neutral"))
 ```
+
+## Figure 1
+
+
+```r
+prep_formant_csv <- function(path) {
+  df <- read_csv(path, na = "--undefined--")
+
+  # Clean up column names
+  names(df) %<>% str_replace(".Hz.", "") %>%
+    str_replace(".s.", "") %>%
+    str_replace("time", "Time")
+
+  # Extract sound from filename
+  sound <- path %>% 
+    str_extract(perl("(?<=the_).(?=\\.csv)")) %>% 
+    tolower
+
+  # Drop unnecessary columns (like bandwidth)
+  df %<>% select(Time, F1, F2) %>%
+    na.omit %>%
+    mutate(Sound = sound)
+
+  df
+}
+
+# Load and reduce the formant files
+formants <- list.files("data/formants/", full.names = TRUE) %>% 
+  lapply(prep_formant_csv) %>% 
+  bind_rows  %>% 
+  # Convert to long format (so there's a Formant-Name column)
+  gather(Formant, Hz, -Time, -Sound) %>%
+  mutate(ms = Time * 1000) %>%
+  filter(150 <= ms, ms <= 405)
+
+# Convert sound name into "Token"
+formants$Token <- formants$Sound %>%
+  str_replace("^v$", "neut.") %>%
+  str_replace("^(d|b)$", "/\\1/ faci.") %>%
+  factor(levels = c("neut.", "/d/ faci.", "/b/ faci."))
+
+inset_legend <- theme(
+  legend.position = c(.5, 0),
+  legend.justification = c(.5, 0),
+  legend.background = element_rect(fill = "white", color = "black"),
+  legend.direction = "horizontal")
+
+
+p <- ggplot(data = formants) +
+  aes(x = ms, y = Hz, color = Token, shape = Token) +
+  geom_point() +
+  labs(x = "Time (ms)", y = "F1 and F2 Frequency (Hz)") +
+  ylim(0, NA) +
+  theme_bw(base_size = 12) +
+  scale_color_brewer(palette = "Dark2") + inset_legend
+p
+```
+
+<img src="plots_files/figure-html/unnamed-chunk-1-1.png" title="" alt="" style="display: block; margin: auto;" />
+
 
 
 
@@ -64,11 +128,11 @@ p2 <- p_base +
 p2
 ```
 
-<img src="plots_files/figure-html/unnamed-chunk-1-1.png" title="" alt="" style="display: block; margin: auto;" />
+<img src="plots_files/figure-html/unnamed-chunk-2-1.png" title="" alt="" style="display: block; margin: auto;" />
 
 _Figure 2._ Proportion looking to target from onset of _the_ to 1250 ms after 
 target-word onset in the two conditions. Symbols and error bars represent 
-observed means ±SE. Dashed vertical lines mark onset of _the_, target-word 
+observed means Â±SE. Dashed vertical lines mark onset of _the_, target-word 
 onset, and target-word offset.
 
 
@@ -143,9 +207,9 @@ props <-  plogis(elogits) %>% round(2) %>%
 p3
 ```
 
-<img src="plots_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" style="display: block; margin: auto;" />
+<img src="plots_files/figure-html/unnamed-chunk-4-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents ±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
+_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents Â±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
 
 
 
