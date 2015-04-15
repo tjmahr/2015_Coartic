@@ -1,3 +1,9 @@
+echo "Checking packrat"
+RScript -e '
+  packrat::status()
+  packrat::restore()
+'
+
 echo "Building data set"
 Rscript --no-environ R/01_bin_looks.R
 
