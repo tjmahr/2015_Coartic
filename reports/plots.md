@@ -25,16 +25,16 @@ set_condition <- . %>%
 set_xlims <- coord_cartesian(xlim = c(-650, 1300))
 landmarks <- geom_vline(x = c(-600, 0, 850), linetype = "dashed", alpha = .5)
 
+x_gaze_lab <- labs(x = "Time since target-word onset (ms)")
+y_gaze_lab <- labs(y = "Proportion looking to target")
+
 inset_legend <- theme(
   legend.position = c(0.015, 1),
   legend.justification = c(0, 1),
   legend.background = element_rect(fill = "white", color = "black"))
 
-x_gaze_lab <- labs(x = "Time since target-word onset (ms)")
-y_gaze_lab <- labs(y = "Proportion looking to target")
-
-theme_big <- theme_bw(base_size = 12) + inset_legend
-theme_small <- theme_bw(base_size = 10) + inset_legend
+theme_big <- theme_bw(base_size = 12) %+replace% inset_legend
+theme_small <- theme_bw(base_size = 10) %+replace% inset_legend
 ```
 
 
@@ -68,24 +68,27 @@ p2
 
 _Figure 2._ Proportion looking to target from onset of _the_ to 1250 ms after 
 target-word onset in the two conditions. Symbols and error bars represent 
-observed means Â±SE. Dashed vertical lines mark onset of _the_, target-word 
+observed means ±SE. Dashed vertical lines mark onset of _the_, target-word 
 onset, and target-word offset.
 
 
 ```r
-ggsave("plots/fig2.png", plot = p2, width = 190, height = 110, 
-       units = "mm", dpi = 600)
-ggsave("plots/fig2.eps", plot = p2, width = 190, height = 110, 
-       units = "mm", dpi = 600, device = cairo_ps)
+# Shortcut so that column widths are mapped to appropriate mm values
+ggsave_cols <- function(cols = 1, ...) {
+  width <- c(`1` = 90, `1.5` = 140, `2` = 190)[cols]
+  ggsave(..., width = width, units = "mm", dpi = 600)
+}
+
+ggsave_cols("plots/fig2.png", p2, cols = 2, height = 110)
+ggsave_cols("plots/fig2.eps", p2, cols = 2, height = 110, device = cairo_ps)
+
 
 p2_small <- p_base + 
-  stat_summary(fun.data = "mean_se", geom = "pointrange", size = .75) + 
-  theme_big
+  stat_summary(fun.data = "mean_se", geom = "pointrange") + 
+  theme_small + theme(legend.position = c(0, 1))
 
-ggsave("plots/fig2_small.png", plot = p2_small, width = 140, height = 80, 
-       units = "mm", dpi = 600)
-ggsave("plots/fig2_small.eps", plot = p2_small, width = 140, height = 80, 
-       units = "mm", dpi = 600, device = cairo_ps)
+ggsave_cols("plots/fig2_small.png", p2_small, cols = 1.5, height = 80)
+ggsave_cols("plots/fig2_small.eps", p2_small, cols = 1.5, height = 80, device = cairo_ps)
 ```
 
 
@@ -142,7 +145,7 @@ p3
 
 <img src="plots_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents Â±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
+_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents ±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
 
 
 
