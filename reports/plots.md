@@ -1,0 +1,163 @@
+
+_This script generates the plots used in the article._
+
+
+
+
+
+```r
+library("magrittr")
+library("dplyr", warn.conflicts = FALSE)
+library("broom")
+library("grid")
+library("ggplot2")
+source("R/00_utils_formatting.R")
+inv_logit <- gtools::inv.logit
+
+set_condition <- . %>% 
+  factor(., levels = c("facilitating", "neutral"))
+```
+
+
+
+```r
+# x axis limits and landmarks
+set_xlims <- coord_cartesian(xlim = c(-650, 1300))
+landmarks <- geom_vline(x = c(-600, 0, 850), linetype = "dashed", alpha = .5)
+
+inset_legend <- theme(
+  legend.position = c(0.015, 1),
+  legend.justification = c(0, 1),
+  legend.background = element_rect(fill = "white", color = "black"))
+
+x_gaze_lab <- labs(x = "Time since target-word onset (ms)")
+y_gaze_lab <- labs(y = "Proportion looking to target")
+
+theme_big <- theme_bw(base_size = 12) + inset_legend
+theme_small <- theme_bw(base_size = 10) + inset_legend
+```
+
+
+## Figure 2
+
+
+```r
+set_condition <- . %>% 
+  factor(., levels = c("facilitating", "neutral"))
+
+# Full looking data
+looks_full <- read.csv("data/binned_looks.csv") %>% tbl_df %>%
+  # select(-ToDistractor, -ToTarget) %>%
+  filter(Condition != "filler", -600 <= Time, Time < 1300) %>%
+  mutate(Condition = set_condition(Condition))
+
+p_base <- 
+  ggplot(looks_full) +
+  aes(x = Time, y = Proportion, color = Condition, shape = Condition) +
+  landmarks + set_xlims +
+  scale_color_brewer(palette = "Set1") +
+  x_gaze_lab + y_gaze_lab
+
+p2 <- p_base + 
+  stat_summary(fun.data = "mean_se", geom = "pointrange", size = .9) + 
+  theme_big
+p2
+```
+
+<img src="plots_files/figure-html/unnamed-chunk-1-1.png" title="" alt="" style="display: block; margin: auto;" />
+
+_Figure 2._ Proportion looking to target from onset of _the_ to 1250 ms after 
+target-word onset in the two conditions. Symbols and error bars represent 
+observed means Â±SE. Dashed vertical lines mark onset of _the_, target-word 
+onset, and target-word offset.
+
+
+```r
+ggsave("plots/fig2.png", plot = p2, width = 190, height = 110, 
+       units = "mm", dpi = 600)
+ggsave("plots/fig2.eps", plot = p2, width = 190, height = 110, 
+       units = "mm", dpi = 600, device = cairo_ps)
+
+p2_small <- p_base + 
+  stat_summary(fun.data = "mean_se", geom = "pointrange", size = .75) + 
+  theme_big
+
+ggsave("plots/fig2_small.png", plot = p2_small, width = 140, height = 80, 
+       units = "mm", dpi = 600)
+ggsave("plots/fig2_small.eps", plot = p2_small, width = 140, height = 80, 
+       units = "mm", dpi = 600, device = cairo_ps)
+```
+
+
+
+
+
+## Figure 3
+
+
+```r
+## Get predicted values and standard errors from the model
+library("AICcmodavg")
+load("data/models.Rdata")
+model <- models$main$m_cond_ranef
+model_data <- read.csv("data/model_data.csv") %>% tbl_df %>% 
+  mutate(Condition = set_condition(Condition))
+
+# Create a design data-frame (i.e., times and conditions, no participants)
+df_design <- model_data %>% 
+  select(Bin, Time, ot1:ot3, Condition) %>% 
+  distinct
+
+# Including columns with unmodeled values breaks predictSE, so drop those.
+df_new <- df_design %>% select(-Bin, -Time)
+
+model_fits <- predictSE(model, df_new) %>% 
+  as_data_frame %>% 
+  bind_cols(df_design) %>% 
+  rename(se = se.fit) %>% 
+  mutate(ymin = fit - se, ymax = fit + se)
+
+p3_base <- ggplot(model_fits) + 
+  aes(x = Time, y = fit, ymax = ymax, ymin = ymin, 
+      shape = Condition, fill = Condition, color = Condition) + 
+  geom_ribbon(alpha = .2, color = NA) + 
+  x_gaze_lab + 
+  labs(y = "Emp. logit of looking to target") +
+  scale_color_brewer(palette = "Set1") + 
+  scale_fill_brewer(palette = "Set1")
+
+p3 <- p3_base + 
+  geom_point(size = 3.5) + 
+  geom_line(size = .9) + 
+  theme_big
+
+# unit conversion for caption
+elogits <- 0:3 / 2
+props <-  plogis(elogits) %>% round(2) %>% 
+  remove_leading_zero %>% 
+  paste0(collapse = ", ")
+
+p3
+```
+
+<img src="plots_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" style="display: block; margin: auto;" />
+
+_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents Â±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
+
+
+
+
+```r
+# Smaller version
+p3_smaller <- 
+  p3_base + 
+  geom_point() + 
+  geom_line() + 
+  theme_small
+
+ggsave("plots/fig3_small.png", plot = p3_smaller, width = 90, height = 90, 
+       units = "mm", dpi = 600)
+ggsave("plots/fig3_small.eps", plot = p3_smaller, width = 90, height = 90, 
+       units = "mm", dpi = 600, device = cairo_ps)
+```
+

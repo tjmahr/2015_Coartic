@@ -10,7 +10,5 @@
 .Rproj.user
 packrat/lib*/
 packrat/src/
-
 # Non-png figure files
 *.svg
-*.eps
