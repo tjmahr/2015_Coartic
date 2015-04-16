@@ -4,12 +4,9 @@ output:
   word_document:
   - default
   html_document:
-    css:
-    - assets/custom.css
-    fig_caption:
-    - yes
-    keep_md:
-    - yes
+    fig_caption: yes
+    keep_md: yes
+    css: assets/custom.css
 ---
 
 _This script generates the summary tables and reports statistics for the 

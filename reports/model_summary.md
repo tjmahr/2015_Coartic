@@ -192,10 +192,10 @@ MODEL5    37   572.3   753.3   -249.1      498.3    0.01        2         1.00
 
 Participant-level variables were tested by comparing nested models. There was
 no effect of vocabulary size on the intercept 
-(_&chi;_^2^(1)&nbsp;=&nbsp;2.9, _p_&nbsp;=&nbsp;.091), 
-nor did vocabulary size interact with the condition effect 
-(_&chi;_^2^(2)&nbsp;=&nbsp;3.1, _p_&nbsp;=&nbsp;.217). There was also no effect of age 
-on the intercept term (_&chi;_^2^(1)&nbsp;=&nbsp;2.6, _p_&nbsp;=&nbsp;.104) or on the 
-condition term (_&chi;_^2^(2)&nbsp;=&nbsp;2.7, _p_&nbsp;=&nbsp;.259). Model fit did not 
+(_&chi;_^2^(1)&nbsp;=&nbsp;2.9, _p_&nbsp;=&nbsp;.091), nor did vocabulary size interact 
+with the condition effect (_&chi;_^2^(2)&nbsp;=&nbsp;3.1, _p_&nbsp;=&nbsp;.217). 
+There was also no effect of age on the intercept term 
+(_&chi;_^2^(1)&nbsp;=&nbsp;2.6, _p_&nbsp;=&nbsp;.104), nor did age interact with 
+condition (_&chi;_^2^(2)&nbsp;=&nbsp;2.7, _p_&nbsp;=&nbsp;.259). Model fit did not 
 significantly improve when vocabulary size or age were allowed to interact with 
 Time or Time-by-Condition parameters.

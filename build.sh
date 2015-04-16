@@ -19,6 +19,7 @@ Rscript -e '
   options(warn = -1)
   rmarkdown::render("reports/citations.Rmd")
   rmarkdown::render("reports/participants.Rmd")
-  rmarkdown::render("reports/model_summary.Rmd")
+  rmarkdown::render("reports/model_summary.Rmd",
+                    c("html_document", "word_document"))
   rmarkdown::render("reports/plots.Rmd")
 '
