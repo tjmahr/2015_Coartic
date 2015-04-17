@@ -97,13 +97,14 @@ formant_inset_legend <- theme(
 )
 
 
-p <- ggplot(data = formants) +
+p_base <- ggplot(data = formants) +
   aes(x = ms, y = Hz / 1000, color = Token, shape = Token) +
-  geom_point() +
   labs(x = "Time (ms)", y = "F1 and F2 frequencies (kHz)") +
   ylim(0, NA) +
   theme_bw(base_size = 10) +
-  scale_color_brewer(palette = "Dark2") + formant_inset_legend
+  formant_inset_legend
+  
+p <- p_base + geom_point() + scale_color_brewer(palette = "Dark2")
 p
 ```
 
@@ -114,6 +115,10 @@ tokens and the steady formant values in the neutral token.
 ```{r}
 ggsave_cols("plots/fig1.png", p, cols = 1, height = 80)
 ggsave_cols("plots/fig1.eps", p, cols = 1, height = 80, device = cairo_ps)
+
+p_bw <- p_base + geom_point(alpha = .75) + aes(color = NULL)
+ggsave_cols("plots/bw_fig1.png", p_bw, cols = 1, height = 80)
+ggsave_cols("plots/bw_fig1.eps", p_bw, cols = 1, height = 80, device = cairo_ps)
 ```
 
 
@@ -180,6 +185,11 @@ p2_small <- p_base +
   theme_small
 ggsave_cols("plots/fig2_small.png", p2_small, cols = 1.5, height = 80)
 
+
+p2_bw <- p2 + aes(color = NULL)
+ggsave_cols("plots/bw_fig2.png", p2_bw, cols = 2, height = 110)
+ggsave_cols("plots/bw_fig2.eps", p2_bw, cols = 2, height = 110, device = cairo_ps)
+
 ```
 
 
@@ -242,8 +252,20 @@ p3_smaller <- p3_base +
   geom_line() + 
   theme_small
 
-ggsave_cols("plots/fig3_small.png", plot = p3_smaller, cols = 1, height = 90)
-ggsave_cols("plots/fig3_small.eps", plot = p3_smaller, cols = 1, height = 90, 
+ggsave_cols("plots/fig3.png", p3_smaller, cols = 1, height = 90)
+ggsave_cols("plots/fig3.eps", p3_smaller, cols = 1, height = 90, 
+            device = cairo_ps)
+
+
+# Smaller version
+p3_bw_smaller <- p3_base + 
+  aes(fill = NULL, color = NULL, linetype = Condition) + 
+  geom_point() + 
+  geom_line() + 
+  theme_small
+
+ggsave_cols("plots/bw_fig3.png", p3_bw_smaller, cols = 1, height = 90)
+ggsave_cols("plots/bw_fig3.eps", p3_bw_smaller, cols = 1, height = 90, 
             device = cairo_ps)
 
 ```
