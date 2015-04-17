@@ -1,0 +1,8 @@
+Praat Version: 5.4.08
+Date: Fri Apr 17 13:58:51 2015
+Max frequency: 4000
+Num formants to extract: 3
+...3 files found
+...saving formants/the_B.csv
+...saving formants/the_D.csv
+...saving formants/the_V.csv
