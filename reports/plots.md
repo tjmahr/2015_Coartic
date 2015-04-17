@@ -20,6 +20,12 @@ inv_logit <- gtools::inv.logit
 
 set_condition <- . %>% 
   factor(., levels = c("facilitating", "neutral"))
+
+# Shortcut so that column widths are mapped to appropriate mm values
+ggsave_cols <- function(cols = 1, ...) {
+  width <- c(`1` = 90, `1.5` = 140, `2` = 190)[as.character(cols)]
+  ggsave(..., width = width, units = "mm", dpi = 600)
+}
 ```
 
 ## Figure 1
@@ -48,7 +54,7 @@ prep_formant_csv <- function(path) {
 }
 
 # Load and reduce the formant files
-formants <- list.files("data/formants/", full.names = TRUE) %>% 
+formants <- list.files("phonetics/formants/", full.names = TRUE) %>% 
   lapply(prep_formant_csv) %>% 
   bind_rows  %>% 
   # Convert to long format (so there's a Formant-Name column)
@@ -62,26 +68,42 @@ formants$Token <- formants$Sound %>%
   str_replace("^(d|b)$", "/\\1/ faci.") %>%
   factor(levels = c("neut.", "/d/ faci.", "/b/ faci."))
 
-inset_legend <- theme(
+formant_inset_legend <- theme(
   legend.position = c(.5, 0),
   legend.justification = c(.5, 0),
-  legend.background = element_rect(fill = "white", color = "black"),
-  legend.direction = "horizontal")
+  legend.background = element_rect(fill = "white", colour = "grey"),
+  legend.key.size = unit(4, "mm"),
+  legend.direction = "horizontal",
+  plot.margin = unit(rep(2, 4), "mm")
+)
 
 
 p <- ggplot(data = formants) +
-  aes(x = ms, y = Hz, color = Token, shape = Token) +
+  aes(x = ms, y = Hz / 1000, color = Token, shape = Token) +
   geom_point() +
-  labs(x = "Time (ms)", y = "F1 and F2 Frequency (Hz)") +
+  labs(x = "Time (ms)", y = "F1 and F2 frequencies (kHz)") +
   ylim(0, NA) +
-  theme_bw(base_size = 12) +
-  scale_color_brewer(palette = "Dark2") + inset_legend
+  theme_bw(base_size = 10) +
+  scale_color_brewer(palette = "Dark2") + formant_inset_legend
 p
 ```
 
 <img src="plots_files/figure-html/unnamed-chunk-1-1.png" title="" alt="" style="display: block; margin: auto;" />
 
+_Figure 1._ F1 and F2 formants of the tokens of the determiner _the_ for the 
+three item types. Note the canonical formant transitions for the facilitating 
+tokens and the steady formant values in the neutral token. 
 
+
+```r
+ggsave_cols("plots/fig1.png", p, cols = 1, height = 80)
+ggsave_cols("plots/fig1.eps", p, cols = 1, height = 80, device = cairo_ps)
+```
+
+
+
+
+# Eyetracking figures
 
 
 ```r
@@ -95,10 +117,12 @@ y_gaze_lab <- labs(y = "Proportion looking to target")
 inset_legend <- theme(
   legend.position = c(0.015, 1),
   legend.justification = c(0, 1),
-  legend.background = element_rect(fill = "white", color = "black"))
+  legend.background = element_rect(fill = "white", color = "grey"),
+  plot.margin = unit(rep(2, 4), "mm")
+)
 
-theme_big <- theme_bw(base_size = 12) %+replace% inset_legend
-theme_small <- theme_bw(base_size = 10) %+replace% inset_legend
+theme_big <- theme_bw(base_size = 12) + inset_legend
+theme_small <- theme_bw(base_size = 10) + inset_legend
 ```
 
 
@@ -128,31 +152,22 @@ p2 <- p_base +
 p2
 ```
 
-<img src="plots_files/figure-html/unnamed-chunk-2-1.png" title="" alt="" style="display: block; margin: auto;" />
+<img src="plots_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" style="display: block; margin: auto;" />
 
 _Figure 2._ Proportion looking to target from onset of _the_ to 1250 ms after 
 target-word onset in the two conditions. Symbols and error bars represent 
-observed means Â±SE. Dashed vertical lines mark onset of _the_, target-word 
+observed means ±SE. Dashed vertical lines mark onset of _the_, target-word 
 onset, and target-word offset.
 
 
 ```r
-# Shortcut so that column widths are mapped to appropriate mm values
-ggsave_cols <- function(cols = 1, ...) {
-  width <- c(`1` = 90, `1.5` = 140, `2` = 190)[cols]
-  ggsave(..., width = width, units = "mm", dpi = 600)
-}
-
 ggsave_cols("plots/fig2.png", p2, cols = 2, height = 110)
 ggsave_cols("plots/fig2.eps", p2, cols = 2, height = 110, device = cairo_ps)
 
-
 p2_small <- p_base + 
   stat_summary(fun.data = "mean_se", geom = "pointrange") + 
-  theme_small + theme(legend.position = c(0, 1))
-
+  theme_small
 ggsave_cols("plots/fig2_small.png", p2_small, cols = 1.5, height = 80)
-ggsave_cols("plots/fig2_small.eps", p2_small, cols = 1.5, height = 80, device = cairo_ps)
 ```
 
 
@@ -207,24 +222,20 @@ props <-  plogis(elogits) %>% round(2) %>%
 p3
 ```
 
-<img src="plots_files/figure-html/unnamed-chunk-4-1.png" title="" alt="" style="display: block; margin: auto;" />
+<img src="plots_files/figure-html/unnamed-chunk-5-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents Â±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
-
-
+_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents ±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
 
 
 ```r
 # Smaller version
-p3_smaller <- 
-  p3_base + 
+p3_smaller <- p3_base + 
   geom_point() + 
   geom_line() + 
   theme_small
 
-ggsave("plots/fig3_small.png", plot = p3_smaller, width = 90, height = 90, 
-       units = "mm", dpi = 600)
-ggsave("plots/fig3_small.eps", plot = p3_smaller, width = 90, height = 90, 
-       units = "mm", dpi = 600, device = cairo_ps)
+ggsave_cols("plots/fig3_small.png", plot = p3_smaller, cols = 1, height = 90)
+ggsave_cols("plots/fig3_small.eps", plot = p3_smaller, cols = 1, height = 90, 
+            device = cairo_ps)
 ```
 
