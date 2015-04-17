@@ -39,6 +39,13 @@ inv_logit <- gtools::inv.logit
 
 set_condition <- . %>% 
   factor(., levels = c("facilitating", "neutral"))
+
+# Shortcut so that column widths are mapped to appropriate mm values
+ggsave_cols <- function(cols = 1, ...) {
+  width <- c(`1` = 90, `1.5` = 140, `2` = 190)[cols]
+  ggsave(..., width = width, units = "mm", dpi = 600)
+}
+
 ```
 
 ## Figure 1
@@ -97,6 +104,12 @@ p <- ggplot(data = formants) +
 p
 ```
 
+_Figure 1._ F1 and F2 formants of the tokens of the determiner _the_ for the 
+three item types. Note the canonical formant transitions for the facilitating 
+tokens and the steady formant values in the neutral token. 
+
+
+
 
 
 ```{r ggplot2 shortcuts}
@@ -148,15 +161,8 @@ observed means ±SE. Dashed vertical lines mark onset of _the_, target-word
 onset, and target-word offset.
 
 ```{r}
-# Shortcut so that column widths are mapped to appropriate mm values
-ggsave_cols <- function(cols = 1, ...) {
-  width <- c(`1` = 90, `1.5` = 140, `2` = 190)[cols]
-  ggsave(..., width = width, units = "mm", dpi = 600)
-}
-
 ggsave_cols("plots/fig2.png", p2, cols = 2, height = 110)
 ggsave_cols("plots/fig2.eps", p2, cols = 2, height = 110, device = cairo_ps)
-
 
 p2_small <- p_base + 
   stat_summary(fun.data = "mean_se", geom = "pointrange") + 
