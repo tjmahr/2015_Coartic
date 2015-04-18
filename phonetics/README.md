@@ -9,12 +9,15 @@ using:
 praatcon -a main.praat tokens 3 4000 0 > results.txt
 ```
 
+The output from the Praat information console is piped into `results.txt`. 
+This file also documents the version of Praat/`praatcon` used.
+
 Spectrograms of each token are in `plots`. These images were produced 
 by the same script--but not from the command line--since `praatcon` 
 crashed whenever it tried to save png files. Running the script 
 interactively, i.e. from within the Praat program and not from the 
 command line, will produce the plots without crashing when the "draw 
-formants" option is checked.. 
+formants" option is checked. 
 
 
 [praat]: http://www.fon.hum.uva.nl/praat/ "Praat website"
