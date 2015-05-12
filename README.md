@@ -1,6 +1,6 @@
-Work-in-progress. Data and R scripts for our article.
+Data and R scripts for our article:
 
-**Mahr, et al. (2015, in press). Anticipatory coarticulation facilitates word recognition in toddlers.**
+**Mahr, T., McMillan, B. T. M., Saffran, J. R., Ellis Weismer, S., & Edwards, J. (2015, in press). Anticipatory coarticulation facilitates word recognition in toddlers. _Cognition_.**
 
 ## Repository overview
 
@@ -22,7 +22,3 @@ of RStudio include pandoc, and it is possible to render RMarkdown files or run t
 to clone this repository as an RStudio project. Once it's cloned, the `packrat` 
 bootstrapper will download the packages and recreate the package library used for this 
 repository.
-
-## Reproducibility Maybe-dos
-
-- [ ] get a DOI for this repository?
