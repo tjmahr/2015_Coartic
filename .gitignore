@@ -9,7 +9,8 @@
 .Rproj.user/
 .Rproj.user
 packrat/lib*/
-packrat/src/
+packrat/src/*
+!packrat/src/packrat/
 # Non-png figure files
 *.svg
 phonetics/*.exe
