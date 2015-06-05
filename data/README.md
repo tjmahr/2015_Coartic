@@ -9,7 +9,7 @@ Child-level scores that relevant for analyses. One row per participant.
 - `Subj`: Participant ID number.
 - `Age`: Age in months. Rounded to one decimal place, so that 1.1 months 
   is 1 month, 3 days.
-- `CDI`: TODO
+- `CDI`: Words Produced score on the short form of the CDI Words and Sentences.
 - `Trials_Block1`, `Trials_Block2`: Number of trials in first/second block.
   Values < 23 indicate that the block was terminated early.
 - `PropNA_200_2000`: Proportion of missing eye-tracking data between 
