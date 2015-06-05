@@ -30,5 +30,6 @@ analyses and re-render the RMarkdown documents.
 
 ### License 
 
-The GPL-2 license applies to the R code I have written in the .R and .Rmd files. The data, 
-collected at the University of Wisconsin--Madison, still belong to the university.
+The GPL-2 license applies to the R code I have written in the .R and .Rmd files and 
+to the Praat scripting code in the .praat files. The data, collected at the University 
+of Wisconsin--Madison, still belong to the university.
