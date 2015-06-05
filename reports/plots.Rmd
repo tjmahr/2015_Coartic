@@ -3,8 +3,9 @@ title: "Plots"
 output:
   html_document:
     fig_caption: yes
-    keep_md: yes
     css: assets/custom.css
+  md_document:
+    variant: markdown_github
 csl: assets/apa.csl
 bibliography: assets/refs.bib
 ---
@@ -61,7 +62,7 @@ prep_formant_csv <- function(path) {
 
   # Extract sound from filename
   sound <- path %>% 
-    str_extract(perl("(?<=the_).(?=\\.csv)")) %>% 
+    str_extract("(?<=the_).(?=\\.csv)") %>% 
     tolower
 
   # Drop unnecessary columns (like bandwidth)
@@ -75,7 +76,7 @@ prep_formant_csv <- function(path) {
 # Load and reduce the formant files
 formants <- list.files("phonetics/formants/", full.names = TRUE) %>% 
   lapply(prep_formant_csv) %>% 
-  bind_rows  %>% 
+  bind_rows %>% 
   # Convert to long format (so there's a Formant-Name column)
   gather(Formant, Hz, -Time, -Sound) %>%
   mutate(ms = Time * 1000) %>%
@@ -255,7 +256,6 @@ p3_smaller <- p3_base +
 ggsave_cols("plots/fig3.png", p3_smaller, cols = 1, height = 90)
 ggsave_cols("plots/fig3.eps", p3_smaller, cols = 1, height = 90, 
             device = cairo_ps)
-
 
 # Smaller version
 p3_bw_smaller <- p3_base + 

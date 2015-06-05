@@ -2,8 +2,9 @@
 output:
   html_document:
     fig_caption: yes
-    keep_md: yes
     css: assets/custom.css
+  md_document:
+    variant: markdown_github
 csl: assets/apa.csl
 bibliography: assets/refs.bib
 ---
@@ -59,7 +60,6 @@ breakdown <- kids$Exclude %>% table %>% as.list
 n_dropped <- breakdown %>% unlist %>% sum
 n_inattentive <- breakdown[["no-trials"]] + breakdown[["too-few-trials"]]
 n_mistracking <- breakdown[["excessive-missing-data"]]
-
 ```
 
 `r nrow(kids_in_models)` 18 to 24-month-olds (`r "_M_" %nb_eq% mean_age`, 

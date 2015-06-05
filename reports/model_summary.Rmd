@@ -1,11 +1,12 @@
 ---
 title: "Models"
 output:
+  md_document:
+    variant: markdown_github
   word_document:
   - default
   html_document:
     fig_caption: yes
-    keep_md: yes
     css: assets/custom.css
 ---
 

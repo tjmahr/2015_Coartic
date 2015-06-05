@@ -1,8 +1,3 @@
-echo "Checking packrat"
-RScript -e '
-  packrat::status()
-  packrat::restore()
-'
 
 echo "Building data set"
 Rscript --no-environ R/01_bin_looks.R
@@ -17,9 +12,8 @@ rm -v -r -- reports/plots_files/
 echo "Generating report output"
 Rscript -e '
   options(warn = -1)
-  rmarkdown::render("reports/citations.Rmd")
-  rmarkdown::render("reports/participants.Rmd")
-  rmarkdown::render("reports/model_summary.Rmd",
-                    c("html_document", "word_document"))
+  rmarkdown::render("reports/citations.Rmd", "all")
+  rmarkdown::render("reports/participants.Rmd", "all")
+  rmarkdown::render("reports/model_summary.Rmd", "all")
   rmarkdown::render("reports/plots.Rmd")
 '

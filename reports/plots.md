@@ -161,7 +161,7 @@ p2
 
 _Figure 2._ Proportion looking to target from onset of _the_ to 1250 ms after 
 target-word onset in the two conditions. Symbols and error bars represent 
-observed means ±SE. Dashed vertical lines mark onset of _the_, target-word 
+observed means Â±SE. Dashed vertical lines mark onset of _the_, target-word 
 onset, and target-word offset.
 
 
@@ -234,7 +234,7 @@ p3
 
 <img src="plots_files/figure-html/unnamed-chunk-5-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents ±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
+_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents Â±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
 
 
 ```r
