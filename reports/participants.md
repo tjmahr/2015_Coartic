@@ -23,7 +23,7 @@ non-filler trials (1).
 
 
 
-Analyses were performed in `R` (vers. 3.1.3) with the `lme4` package 
+Analyses were performed in `R` (vers. 3.2.0) with the `lme4` package 
 [vers. 1.1.7; @lme4]. 
 
 ***

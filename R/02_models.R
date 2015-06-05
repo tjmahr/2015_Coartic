@@ -39,9 +39,9 @@ m0 <- update(m_empty, . ~ . + (ot1 + ot2 + ot3) * Condition)
 m1 <- update(m0, . ~ . + (ot1 + ot2 + ot3 | Subj:Condition))
 summary(m1)
 
-# Alternative (left-sided) random effects structure. Too many random effects
-# covariances probably keep it from converging nicely.
-m1b <- update(m0, . ~ . + ((ot1 + ot2 + ot3) * Condition | Subj))
+# Alternative (left-sided) random effects structure.
+m1b <- update(m0, . ~ (ot1 + ot2 + ot3) * Condition +
+                ((ot1 + ot2 + ot3) * Condition | Subj))
 summary(m1b)
 
 main_models <- list(
