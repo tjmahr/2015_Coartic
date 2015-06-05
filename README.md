@@ -1,6 +1,6 @@
 Data and R scripts for our article:
 
-**Mahr, T., McMillan, B. T. M., Saffran, J. R., Ellis Weismer, S., & Edwards, J. (2015, in press). Anticipatory coarticulation facilitates word recognition in toddlers. _Cognition_.**
+**Mahr, T., McMillan, B. T. M., Saffran, J. R., Ellis Weismer, S., & Edwards, J. (2015, in press). Anticipatory coarticulation facilitates word recognition in toddlers. _Cognition_. 10.1016/j.cognition.2015.05.009**
 
 ## Repository overview
 
