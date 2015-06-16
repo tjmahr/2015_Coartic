@@ -1,6 +1,8 @@
 Data and R scripts for our article:
 
-**Mahr, T., McMillan, B. T. M., Saffran, J. R., Ellis Weismer, S., & Edwards, J. (2015, in press). Anticipatory coarticulation facilitates word recognition in toddlers. _Cognition_. 10.1016/j.cognition.2015.05.009**
+Mahr, T., McMillan, B. T. M., Saffran, J. R., Ellis Weismer, S., & Edwards, J. (2015). 
+**Anticipatory coarticulation facilitates word recognition in toddlers.** _Cognition_, 
+_142_, 345–350. [10.1016/j.cognition.2015.05.009](http://doi.org/10.1016/j.cognition.2015.05.009)**
 
 ## Repository overview
 
@@ -32,4 +34,37 @@ analyses and re-render the RMarkdown documents.
 
 The GPL-2 license applies to the R code I have written in the .R and .Rmd files and 
 to the Praat scripting code in the .praat files. The data, collected at the University 
-of Wisconsin--Madison, still belong to the university.
+of Wisconsin–Madison, still belong to the university.
+
+### Citation
+
+Here is the BibTex entry for the article:
+
+```
+@article {Mahr2015,
+title    = {Anticipatory coarticulation facilitates word recognition 
+            in toddlers},
+author   = {Mahr, Tristan and McMillan, Brianna T. M. and Saffran, Jenny R. 
+            and {Ellis Weismer}, Susan and Edwards, Jan},
+year     = {2015},
+journal  = {Cognition},
+pages    = {345--350},
+volume   = {142},
+doi      = {10.1016/j.cognition.2015.05.009},
+url      = {http://doi.org/10.1016/j.cognition.2015.05.009},
+abstract = {Children learn from their environments and their caregivers. 
+            To capitalize on learning opportunities, young children have to 
+            recognize familiar words efficiently by integrating contextual 
+            cues across word boundaries. Previous research has shown that 
+            adults can use phonetic cues from anticipatory coarticulation 
+            during word recognition. We asked whether 18--24 month-olds (n=29) 
+            used coarticulatory cues on the word "the" when recognizing the 
+            following noun. We performed a looking-while-listening eyetracking 
+            experiment to examine word recognition in neutral versus 
+            facilitating coarticulatory conditions. Participants looked to the 
+            target image significantly sooner when the determiner contained 
+            facilitating coarticulatory cues. These results provide the first 
+            evidence that novice word-learners can take advantage of 
+            anticipatory sub-phonemic cues during word recognition.}
+}
+```
