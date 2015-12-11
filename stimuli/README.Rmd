@@ -1,0 +1,75 @@
+---
+title: "Stimuli"
+author: "Tristan Mahr"
+date: "December 11, 2015"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r, echo = FALSE}
+library("knitr")
+opts_chunk$set(comment = "#>")
+```
+
+## Design Summary
+
+`trials.csv` contains a table documenting the experimental design. There is one
+row per experimental trial designed. 
+
+The columns of the table indicate:
+
+* `Block`: The experiment was administer using two blocks of trials. This number 
+  indicates which block includes this trial.
+* `TrialNo`: The number of the trial within the block. Trials are numbered in 
+  the order in which they are administered.
+* `Condition`: Experimental condition.
+* `WordGroup`: Which yoked pair of words were presented.
+* `TargetWord`: The word named during that trial.
+* `TargetImage`: The side of the screen ("ImageL" = left, "ImageR" = right) 
+   containing the target image.
+* `DistractorImage`: The side of the screen ("ImageL" = left, "ImageR" = right) 
+   containing the distractor image.
+* `ImageLFile`: Filename of the image presented on the left side of the screen.
+* `ImageRFile`: Filename of the image presented on the left side of the screen.
+* `CarrierWord`: Word used to start the carrier phrase.
+* `CarrierPitch`: For variety, we use two versions of each carrier phrase 
+  starter: One with a high ("hi") pitch and one with a low ("lo") pitch.
+* `PromptFile`: Filename of the recording used as the prompt during the trial.
+* `AttentionGetterFile`: Filename of the attention-getter/reinforcer that played 
+  at the end of each trial.
+
+The output below shows the first few values ("Observations") in each column
+("Variables"):
+
+```{r, message = FALSE}
+library("readr")
+library("dplyr")
+library("knitr")
+stim_set <- read_csv("trials.csv")
+glimpse(stim_set, width = 70)
+```
+
+### Pivot Tables
+
+We can check the balance of the trials by counting the trials under different
+kinds of grouping. 
+
+Number of times each word is the target in each condition:
+
+```{r}
+stim_set %>% 
+  group_by(Condition, WordGroup, TargetWord) %>% 
+  tally %>% 
+  kable
+```
+
+Number of times the left or right side of the screen contained the target in
+each condition:
+
+```{r}
+stim_set %>% 
+  group_by(Condition, TargetImage) %>% 
+  tally %>% 
+  kable
+```
