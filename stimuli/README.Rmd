@@ -3,8 +3,9 @@ title: "Stimuli"
 author: "Tristan Mahr"
 date: "December 11, 2015"
 output: 
-  html_document: 
-    keep_md: yes
+  md_document:
+    variant: markdown_github
+    preserve_yaml: yes
 ---
 
 ```{r, echo = FALSE}
