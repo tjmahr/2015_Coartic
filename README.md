@@ -14,6 +14,7 @@ _142_, 345–350. [10.1016/j.cognition.2015.05.009](http://doi.org/10.1016/j.cog
 * `reports` holds RMarkdown files that are used to produce formatted tables, 
   formatted citations, and number-heavy paragraphs which appear in the article.
 * `packrat` helper directory for managing a custom R package library.
+* `stimuli` contains sounds and images used in the experiment.
 
 The shell script `build.sh` runs all the R scripts to aggregate the data, fit the models, 
 and generate HTML output from the RMarkdown files.
