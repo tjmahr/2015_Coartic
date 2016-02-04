@@ -15,5 +15,8 @@ Rscript -e '
   rmarkdown::render("reports/citations.Rmd", "all")
   rmarkdown::render("reports/participants.Rmd", "all")
   rmarkdown::render("reports/model_summary.Rmd", "all")
-  rmarkdown::render("reports/plots.Rmd")
+  rmarkdown::render("reports/citations.Rmd", "md_document")
+  rmarkdown::render("reports/participants.Rmd", "md_document")
+  rmarkdown::render("reports/model_summary.Rmd", "md_document")
+  rmarkdown::render("reports/plots.Rmd", "md_document")
 '

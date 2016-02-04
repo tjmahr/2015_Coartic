@@ -40,7 +40,7 @@ following Barr (2008):
 
 (Mirman, 2014)
 
-(vers. 1.1.7; D. Bates, Mächler, Bolker, & Walker, 2014)
+(vers. 1.1.10; D. Bates, Mächler, Bolker, & Walker, 2014)
 
 References
 ==========

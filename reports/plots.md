@@ -1,12 +1,6 @@
-# Plots
+*This script generates the plots used in the article.*
 
-_This script generates the plots used in the article._
-
-
-
-
-
-```r
+``` r
 library("magrittr", warn.conflicts = FALSE)
 library("tidyr", warn.conflicts = FALSE)
 library("dplyr", warn.conflicts = FALSE)
@@ -28,10 +22,10 @@ ggsave_cols <- function(cols = 1, ...) {
 }
 ```
 
-## Figure 1
+Figure 1
+--------
 
-
-```r
+``` r
 prep_formant_csv <- function(path) {
   df <- read_csv(path, na = "--undefined--")
 
@@ -42,7 +36,7 @@ prep_formant_csv <- function(path) {
 
   # Extract sound from filename
   sound <- path %>% 
-    str_extract(perl("(?<=the_).(?=\\.csv)")) %>% 
+    str_extract("(?<=the_).(?=\\.csv)") %>% 
     tolower
 
   # Drop unnecessary columns (like bandwidth)
@@ -56,7 +50,7 @@ prep_formant_csv <- function(path) {
 # Load and reduce the formant files
 formants <- list.files("phonetics/formants/", full.names = TRUE) %>% 
   lapply(prep_formant_csv) %>% 
-  bind_rows  %>% 
+  bind_rows %>% 
   # Convert to long format (so there's a Formant-Name column)
   gather(Formant, Hz, -Time, -Sound) %>%
   mutate(ms = Time * 1000) %>%
@@ -89,32 +83,31 @@ p <- p_base + geom_point() + scale_color_brewer(palette = "Dark2")
 p
 ```
 
-<img src="plots_files/figure-html/unnamed-chunk-1-1.png" title="" alt="" style="display: block; margin: auto;" />
+<img src="plots_files/figure-markdown_github/unnamed-chunk-1-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-_Figure 1._ F1 and F2 formants of the tokens of the determiner _the_ for the 
-three item types. Note the canonical formant transitions for the facilitating 
-tokens and the steady formant values in the neutral token. 
+*Figure 1.* F1 and F2 formants of the tokens of the determiner *the* for the three item types. Note the canonical formant transitions for the facilitating tokens and the steady formant values in the neutral token.
 
-
-```r
+``` r
 ggsave_cols("plots/fig1.png", p, cols = 1, height = 80)
 ggsave_cols("plots/fig1.eps", p, cols = 1, height = 80, device = cairo_ps)
+```
 
+![](plots_files/figure-markdown_github/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
 p_bw <- p_base + geom_point(alpha = .75) + aes(color = NULL)
 ggsave_cols("plots/bw_fig1.png", p_bw, cols = 1, height = 80)
 ggsave_cols("plots/bw_fig1.eps", p_bw, cols = 1, height = 80, device = cairo_ps)
 ```
 
+Eyetracking figures
+===================
 
-
-
-# Eyetracking figures
-
-
-```r
+``` r
 # x axis limits and landmarks
 set_xlims <- coord_cartesian(xlim = c(-650, 1300))
-landmarks <- geom_vline(x = c(-600, 0, 850), linetype = "dashed", alpha = .5)
+landmarks <- geom_vline(xintercept = c(-600, 0, 850), linetype = "dashed", 
+                        alpha = .5)
 
 x_gaze_lab <- labs(x = "Time since target-word onset (ms)")
 y_gaze_lab <- labs(y = "Proportion looking to target")
@@ -130,17 +123,15 @@ theme_big <- theme_bw(base_size = 12) + inset_legend
 theme_small <- theme_bw(base_size = 10) + inset_legend
 ```
 
+Figure 2
+--------
 
-## Figure 2
-
-
-```r
+``` r
 set_condition <- . %>% 
   factor(., levels = c("facilitating", "neutral"))
 
 # Full looking data
-looks_full <- read.csv("data/binned_looks.csv") %>% tbl_df %>%
-  # select(-ToDistractor, -ToTarget) %>%
+looks_full <- read_csv("data/binned_looks.csv") %>%
   filter(Condition != "filler", -600 <= Time, Time < 1300) %>%
   mutate(Condition = set_condition(Condition))
 
@@ -157,18 +148,18 @@ p2 <- p_base +
 p2
 ```
 
-<img src="plots_files/figure-html/unnamed-chunk-3-1.png" title="" alt="" style="display: block; margin: auto;" />
+<img src="plots_files/figure-markdown_github/unnamed-chunk-3-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-_Figure 2._ Proportion looking to target from onset of _the_ to 1250 ms after 
-target-word onset in the two conditions. Symbols and error bars represent 
-observed means Â±SE. Dashed vertical lines mark onset of _the_, target-word 
-onset, and target-word offset.
+*Figure 2.* Proportion looking to target from onset of *the* to 1250 ms after target-word onset in the two conditions. Symbols and error bars represent observed means Â±SE. Dashed vertical lines mark onset of *the*, target-word onset, and target-word offset.
 
-
-```r
+``` r
 ggsave_cols("plots/fig2.png", p2, cols = 2, height = 110)
 ggsave_cols("plots/fig2.eps", p2, cols = 2, height = 110, device = cairo_ps)
+```
 
+![](plots_files/figure-markdown_github/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
 p2_small <- p_base + 
   stat_summary(fun.data = "mean_se", geom = "pointrange") + 
   theme_small
@@ -180,19 +171,15 @@ ggsave_cols("plots/bw_fig2.png", p2_bw, cols = 2, height = 110)
 ggsave_cols("plots/bw_fig2.eps", p2_bw, cols = 2, height = 110, device = cairo_ps)
 ```
 
+Figure 3
+--------
 
-
-
-
-## Figure 3
-
-
-```r
+``` r
 ## Get predicted values and standard errors from the model
 library("AICcmodavg")
 load("data/models.Rdata")
 model <- models$main$m_cond_ranef
-model_data <- read.csv("data/model_data.csv") %>% tbl_df %>% 
+model_data <- read_csv("data/model_data.csv") %>%  
   mutate(Condition = set_condition(Condition))
 
 # Create a design data-frame (i.e., times and conditions, no participants)
@@ -232,12 +219,11 @@ props <-  plogis(elogits) %>% round(2) %>%
 p3
 ```
 
-<img src="plots_files/figure-html/unnamed-chunk-5-1.png" title="" alt="" style="display: block; margin: auto;" />
+<img src="plots_files/figure-markdown_github/unnamed-chunk-5-1.png" title="" alt="" style="display: block; margin: auto;" />
 
-_Figure 3._ Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents Â±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
+*Figure 3.* Growth curve estimates of looking probability during analysis window. Symbols and lines represent model estimates, and ribbon represents Â±SE. Empirical logit values on y-axis correspond to proportions of .5, .62, .73, .82. Note that the curves are essentially phase-shifted by 100 ms.
 
-
-```r
+``` r
 # Smaller version
 p3_smaller <- p3_base + 
   geom_point() + 
@@ -247,8 +233,11 @@ p3_smaller <- p3_base +
 ggsave_cols("plots/fig3.png", p3_smaller, cols = 1, height = 90)
 ggsave_cols("plots/fig3.eps", p3_smaller, cols = 1, height = 90, 
             device = cairo_ps)
+```
 
+![](plots_files/figure-markdown_github/unnamed-chunk-6-1.png)<!-- -->
 
+``` r
 # Smaller version
 p3_bw_smaller <- p3_base + 
   aes(fill = NULL, color = NULL, linetype = Condition) + 
@@ -260,4 +249,3 @@ ggsave_cols("plots/bw_fig3.png", p3_bw_smaller, cols = 1, height = 90)
 ggsave_cols("plots/bw_fig3.eps", p3_bw_smaller, cols = 1, height = 90, 
             device = cairo_ps)
 ```
-

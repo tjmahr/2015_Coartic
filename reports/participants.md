@@ -7,7 +7,7 @@ Participants
 
 ### Software sentence
 
-Analyses were performed in `R` (vers. 3.2.0) with the `lme4` package (vers. 1.1.7; Bates, Mächler, Bolker, & Walker, 2014).
+Analyses were performed in `R` (vers. 3.2.3) with the `lme4` package (vers. 1.1.10; Bates, Mächler, Bolker, & Walker, 2014).
 
 ------------------------------------------------------------------------
 

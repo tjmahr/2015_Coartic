@@ -54,7 +54,7 @@ Model Output
     ## ot2:Cndtnfc  0.035 -0.183 -0.698 -0.061 -0.064  0.316       
     ## ot3:Cndtnfc -0.093  0.170 -0.066 -0.645  0.165 -0.291  0.099
 
-![](model_summary_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](model_summary_files/figure-markdown_github/unnamed-chunk-2-1.png)<!-- -->
 
 Write up
 --------

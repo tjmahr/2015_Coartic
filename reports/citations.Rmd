@@ -1,10 +1,10 @@
 ---
 output:
+  md_document:
+    variant: markdown_github
   html_document:
     fig_caption: yes
     css: assets/custom.css
-  md_document:
-    variant: markdown_github
 csl: assets/apa.csl
 bibliography: assets/refs.bib
 ---

@@ -32,6 +32,7 @@ library("magrittr")
 library("dplyr")
 library("broom")
 library("lme4")
+library("readr")
 library("ggplot2")
 
 load("data/models.Rdata")
@@ -41,9 +42,9 @@ source("R/00_utils_formatting.R")
 source("R/00_lookr_imports.R")
 
 # Table to help convert orthogonal time values back to milliseconds
-times <- read.csv("data/model_data.csv") %>% 
+times <- read_csv("data/model_data.csv") %>% 
   select(Time, ot1) %>% 
-  unique
+  distinct
 
 # Extract values from an lme4 model
 tidy_model <- . %>% 
