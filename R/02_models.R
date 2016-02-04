@@ -1,5 +1,5 @@
 library("stringr")
-library("magrittr")
+library("readr")
 library("dplyr", warn.conflicts = FALSE)
 library("lme4")
 
@@ -7,12 +7,12 @@ source("R/00_lookr_imports.R")
 mean_center <- function(xs) xs - mean(xs, na.rm = TRUE)
 
 # Load looking data
-looks <- read.csv("data/model_data.csv") %>% tbl_df %>%
+looks <- read_csv("data/model_data.csv") %>%
   mutate(Condition = factor(Condition, levels = c("neutral", "facilitating")))
 
 # Load child-level data
-infos <- read.csv("data/subj.csv") %>%
-  tbl_df %>%
+infos <- read_csv("data/subj.csv") %>%
+  mutate(Subj = as.integer(Subj)) %>%
   filter(is.na(Exclude)) %>%
   # mean-center predictors
   transmute(Subj = Subj, cAge =  mean_center(Age), cCDI = mean_center(CDI))

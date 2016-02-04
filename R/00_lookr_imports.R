@@ -20,14 +20,30 @@
 #' @importFrom reshape2 dcast
 #' @export
 aggregate_looks <- function(frame, formula = Subj + Condition + Time ~ GazeByImageAOI) {
-  require("reshape2")
-  looks <- dcast(frame, formula = formula, fun.aggregate = length,
+  looks <- reshape2::dcast(frame, formula = formula, fun.aggregate = length,
                  value.var = "GazeByImageAOI")
   other_AOIs <- setdiff(frame$GazeByImageAOI, c("Target", "tracked", NA))
   looks$Others <- rowSums(looks[other_AOIs])
   names(looks)[which(names(looks) == "NA")] <- "NAs"
   names(looks)[which(names(looks) == "tracked")] <- "Elsewhere"
-  transform(looks, Proportion = Target / (Others + Target))
+
+  dplyr::mutate(looks,
+         Looks = Others + Target + NAs + Elsewhere,
+         Proportion = Target / (Others + Target),
+         ProportionSE = se_prop(Proportion, Others + Target),
+         PropNA = NAs / Looks)
+}
+
+#' Standard error for proportions
+#'
+#' See http://www.r-tutor.com/elementary-statistics/interval-estimation/interval-estimate-population-proportion
+#' @param proportion proportions of hits
+#' @param n_possible numbers of total events
+#' @return the standard errors of the proportion estimates
+#' @export
+se_prop <- function(proportion, n_possible) {
+  spread <- proportion * (1 - proportion)
+  sqrt(spread / n_possible)
 }
 
 
