@@ -1,4 +1,4 @@
-Data and R scripts for our article:
+Research compendium for our article:
 
 Mahr, T., McMillan, B. T. M., Saffran, J. R., Ellis Weismer, S., & Edwards, J. (2015). 
 **Anticipatory coarticulation facilitates word recognition in toddlers.** _Cognition_, 
@@ -10,18 +10,22 @@ _142_, 345–350. [10.1016/j.cognition.2015.05.009](http://doi.org/10.1016/j.cog
   aggregated eye-tracking data. 
     - `data/README` provides a "codebook" for the data in each file.
 * `R` contains scripts that aggregate the eye-tracking data, fit lme4 models, 
-  as well as utility functions for formatting tables, numbers and other R objects.
+  as well as utility functions for formatting tables, numbers and other R 
+  objects.
 * `reports` holds RMarkdown files that are used to produce formatted tables, 
   formatted citations, and number-heavy paragraphs which appear in the article.
-* `packrat` helper directory for managing a custom R package library.
+* `plots` contains the figures for the article.
+* `phonetics` houses Praat scripts.
 * `stimuli` contains sounds and images used in the experiment.
+* `extras` are like the "bonus features" from the project.
+* `packrat` is helper directory for managing a custom R package library.
 
-The shell script `build.sh` runs all the R scripts to aggregate the data, fit the models, 
-and generate HTML output from the RMarkdown files.
+The shell script `build.sh` runs all the R scripts to aggregate the data, fit
+the models, and generate HTML output from the RMarkdown files.
 
 ### Tools 
 
-This repository works best with a current version of RStudio. Current (2015) versions 
+This repository works best with a current version of RStudio. Current (2015+) versions 
 of RStudio include pandoc, and it is possible to render RMarkdown files or run the 
 `build.sh` script with a single click. Use `New Project > Version Control > Git > ...` 
 to clone this repository as an RStudio project. Once it's cloned, the `packrat` 
