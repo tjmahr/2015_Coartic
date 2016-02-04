@@ -57,6 +57,11 @@ Source: CRAN
 Version: 0.1
 Hash: 0afb92b59b02593c70ff8046700ba9d3
 
+Package: audio
+Source: CRAN
+Version: 0.1-5
+Hash: 9bfdee08c847cc05073bb78abc04b2c8
+
 Package: bitops
 Source: CRAN
 Version: 1.0-6
@@ -116,6 +121,12 @@ Source: CRAN
 Version: 2.0.0
 Hash: 5befb1e7a9c7d0692d6c35fa02a29dbf
 Requires: digest, gtable, plyr, reshape2, scales
+
+Package: gridExtra
+Source: CRAN
+Version: 2.0.0
+Hash: 9be37a2d3b6a427d8a3d2a42f2b0bc01
+Requires: gtable
 
 Package: gtable
 Source: CRAN
