@@ -2,8 +2,10 @@
 # Feb. 2016.
 
 
-# Make sure R is up to date all the way
+# # Make sure that the current library has been applied.
+# packrat::restore()
 
+# Make sure R is up to date all the way
 # # Manually update packrat
 # install.packages("packrat")
 # library("packrat")
