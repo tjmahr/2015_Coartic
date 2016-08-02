@@ -14,7 +14,7 @@ writeInfoLine: "Date: " + date$()
 # procedure by extracting 3 formants under 4 kHz instead of 5 formants 
 # under 5.5 kHz.
 form Measure formants in tokens in a folder
-    sentence directory tokens
+	sentence directory tokens
 	real num_formants 3
 	real max_frequency 4000
 	boolean draw_formants 0

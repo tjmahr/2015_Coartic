@@ -1,8 +1,11 @@
-Praat Version: 5.4.08
-Date: Fri Apr 17 13:58:51 2015
+Praat Version: 6.0.19
+Date: Tue Aug 02 12:11:11 2016
 Max frequency: 4000
 Num formants to extract: 3
 ...3 files found
 ...saving formants/the_B.csv
+...saving plots/the_B.png
 ...saving formants/the_D.csv
+...saving plots/the_D.png
 ...saving formants/the_V.csv
+...saving plots/the_V.png
