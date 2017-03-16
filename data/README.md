@@ -12,7 +12,7 @@ Child-level scores that relevant for analyses. One row per participant.
 - `CDI`: Words Produced score on the short form of the CDI Words and Sentences.
 - `Trials_Block1`, `Trials_Block2`: Number of trials in first/second block.
   Values < 23 indicate that the block was terminated early.
-- `PropNA_200_2000`: Proportion of missing eye-tracking data between 
+- `PropNA_200_1000`: Proportion of missing eye-tracking data between 
   185-1015 ms. These time values are offset by 1 frame so that when the data are 
   downsampled into 50-ms bins, the center frame for the first and final bins 
   are 200 and 1000 ms.
