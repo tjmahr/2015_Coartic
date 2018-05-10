@@ -43,7 +43,7 @@ of Wisconsin–Madison, still belong to the university.
 
 ### Citation
 
-Here is the BibTex entry for the article:
+Here is the BibTeX entry for the article:
 
 ```
 @article {Mahr2015,
